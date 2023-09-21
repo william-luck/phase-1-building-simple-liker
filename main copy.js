@@ -6,13 +6,25 @@ const FULL_HEART = '♥'
 
 
 
-const likeButton = document.querySelector('li')
-likeButton.addEventListener('click', likeButton => fillHeart(likeButton))
+// const likeButton = document.querySelector('li')
+// likeButton.addEventListener('click', fillHeart)
 
-function fillHeart() {
+const likeButtonCollection = document.getElementsByClassName('like')
+for (const likeButton of likeButtonCollection) {
+  likeButton.addEventListener('click', e => fillHeart(e))
+}
+
+function fillHeart(e) {
+  const likeButton = e.target
   if (likeButton.lastChild.className === 'like-glyph') { // checks to see if heart is filled
     const response = mimicServerCall()
-    .then(changeLiker)
+    .then(() => {
+      console.log(likeButton)
+      const updatedHeart = likeButton.lastChild
+      updatedHeart.textContent = `${FULL_HEART}`
+      updatedHeart.className = 'activated-heart'
+      console.log("like successful")
+    })
     .catch(response => {
       console.log("Like unsuccesful")
       const error = document.querySelector('div')
